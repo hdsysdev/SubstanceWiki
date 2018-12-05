@@ -1,0 +1,17 @@
+@media only screen and (max-width: 990px) {
+    .navmenu {
+        height:182px;
+    }
+}
+
+.div1 {
+    margin: 0px auto;
+
+}
+.div2{
+    position: absolute;
+    z-index: 2;
+}
+.endorsementAlert{
+    z-index: 1;
+}

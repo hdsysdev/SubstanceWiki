@@ -1,45 +1,53 @@
 <?php
-$xmlDoc=new DOMDocument();
-$xmlDoc->load("links.xml");
+$mysqli = mysqli_connect('localhost','pi','raspberry','mydb');
 
-$x=$xmlDoc->getElementsByTagName('link');
+/* check connection */
+if ($mysqli->connect_errno) {
+    printf("Connect failed: %s\n", $mysqli->connect_error);
+    exit();
+}
 
-//get the q parameter from URL
-$q=$_GET["q"];
+$query = "SELECT * FROM substances";
+$result = $mysqli->query($query);
 
-//lookup all links from the xml file if length of q>0
-if (strlen($q)>0) {
-    $hint="";
-    for($i=0; $i<($x->length); $i++) {
-        $y=$x->item($i)->getElementsByTagName('title');
-        $z=$x->item($i)->getElementsByTagName('url');
-        if ($y->item(0)->nodeType==1) {
-            //find a link matching the search text
-            if (stristr($y->item(0)->childNodes->item(0)->nodeValue,$q)) {
-                if ($hint=="") {
-                    $hint="<a href='" .
-                        $z->item(0)->childNodes->item(0)->nodeValue .
-                        "' target='_blank'>" .
-                        $y->item(0)->childNodes->item(0)->nodeValue . "</a>";
-                } else {
-                    $hint=$hint . "<br /><a href='" .
-                        $z->item(0)->childNodes->item(0)->nodeValue .
-                        "' target='_blank'>" .
-                        $y->item(0)->childNodes->item(0)->nodeValue . "</a>";
-                }
+while($row = $result->fetch_array())
+{
+    $a[]=$row["SubstanceName"];
+}
+
+/* free result set */
+$result->free();
+
+/* close connection */
+$mysqli->close();
+
+// get the q parameter from URL
+$q = $_REQUEST["q"];
+
+$hint = "";
+
+// lookup all hints from array if $q is different from ""
+if ($q !== "") {
+    $q = strtolower($q);
+    $len=strlen($q);
+    foreach($a as $name) {
+        if (stristr($q, substr($name, 0, $len))) {
+            if ($hint === "") {
+                $hint = "<a href=\"substance.php?substance=" . $name . "\" class=\"list-group-item list-group-item-action\">" . $name . "</a>";
+//                $hint = $name;
+            } else {
+//                $hint .= ", $name";
+                $hint = "<a href=\"substance.php?substance=" . $name . "\" class=\"list-group-item list-group-item-action\">" . $name . "</a>";
             }
         }
     }
 }
 
-// Set output to "no suggestion" if no hint was found
-// or to the correct values
-if ($hint=="") {
-    $response="no suggestion";
-} else {
-    $response=$hint;
+if (isset($q))
+{
+    // Output "no suggestion" if no hint was found or output correct values
+    if ($hint != "") {
+        echo $hint;
+    }
 }
-
-//output the response
-echo $response;
 ?>
