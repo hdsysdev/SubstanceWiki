@@ -42,6 +42,40 @@
     </div>
 </nav>
 
+<?php
+$servername = "localhost";
+$username = "pi";
+$password = "raspberry";
+$dbname = "mydb";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+$substance = "\"".$_GET['substance']."\"";
+$sql = "SELECT * FROM substances WHERE SubstanceName=" . $substance;
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $name = $row["SubstanceName"];
+        $desc = $row["SubstanceDescription"];
+        $pharm = $row["SubstancePharm"];
+        $chem = $row["SubstanceChemistry"];
+        $lowdose = $row["LowDoseRange"];
+        $middose = $row["MediumDoseRange"];
+        $highdose = $row["HighDoseRange"];
+        $img = $row["StructureImageName"];
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>
+
 <div id="content">
     <div class="alert alert-danger" role="alert">
         <img src="img/warning.png" style="object-fit: cover; height: 35px;">
@@ -50,33 +84,18 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-8 bg-success">
-                <h1>Title</h1>
+            <div class="col-lg-8">
+                <h1><?php echo $name?> <?php echo $_GET['substance']?></h1>
                 <hr class="my-4"/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p><?php echo $desc;?></p>
                 <h2>Chemistry</h2>
                 <hr class="my-4"/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p><?php echo $chem?></p>
                 <h2>Pharmacology</h2>
                 <hr class="my-4"/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p><?php echo $pharm ?></p>
                 <h2>Subjective Effects</h2>
                 <hr class="my-4"/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <div class="card">
                     <h5 class="card-header">Physical Effects</h5>
                     <div class="card-body">
@@ -93,11 +112,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 bg-warning">
+            <div class="col-lg-4">
                 <div class="jumbotron">
                     <h3>Hello, world!</h3>
                     <hr class="my-3"/>
-                    <img class="img-thumbnail" style="width: 100%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/DMT.svg/1200px-DMT.svg.png">
+                    <img class="img-thumbnail" style="width: 100%" src="<?php echo "img/".$img?>" >
                     <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
                     <hr class="my-4">
                     <table class="table table-bordered" style="background: white;">
@@ -110,15 +129,15 @@
                         <tbody>
                         <tr>
                             <th scope="row">Low</th>
-                            <td>0mg-0mg</td>
+                            <td><?php echo $lowdose?></td>
                         </tr>
                         <tr>
                             <th scope="row">Medium</th>
-                            <td>0mg-0mg</td>
+                            <td><?php echo $middose?></td>
                         </tr>
                         <tr>
                             <th scope="row">High</th>
-                            <td>0mg-0mg</td>
+                            <td><?php echo $highdose?></td>
                         </tr>
                         </tbody>
                     </table>
