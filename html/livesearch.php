@@ -1,5 +1,5 @@
 <?php
-$mysqli = mysqli_connect('localhost','pi','raspberry','mydb');
+$mysqli = mysqli_connect('localhost','root','','SubstanceWiki');
 
 /* check connection */
 if ($mysqli->connect_errno) {
@@ -22,7 +22,7 @@ $result->free();
 $mysqli->close();
 
 // get the q parameter from URL
-$q = $_REQUEST["q"];
+$q = @$_REQUEST["q"];
 
 $hint = "";
 
