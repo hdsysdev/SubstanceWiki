@@ -2,8 +2,8 @@
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 06, 2018 at 03:47 PM
+-- Host: 127.0.0.1
+-- Generation Time: Dec 14, 2018 at 03:42 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -19,16 +19,34 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `SubstanceWiki`
+-- Database: `substancewiki`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Effects`
+-- Table structure for table `admin`
 --
 
-CREATE TABLE `Effects` (
+CREATE TABLE `admin` (
+  `username` varchar(30) NOT NULL,
+  `password` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`username`, `password`) VALUES
+('admin', 'password');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `effects`
+--
+
+CREATE TABLE `effects` (
   `EffectID` int(10) NOT NULL,
   `EffectName` varchar(100) DEFAULT NULL,
   `EffectType` varchar(100) DEFAULT NULL,
@@ -36,10 +54,10 @@ CREATE TABLE `Effects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `Effects`
+-- Dumping data for table `effects`
 --
 
-INSERT INTO `Effects` (`EffectID`, `EffectName`, `EffectType`, `EffectDescription`) VALUES
+INSERT INTO `effects` (`EffectID`, `EffectName`, `EffectType`, `EffectDescription`) VALUES
 (1, 'Analysis enhancement', 'Cognitive', 'Analysis enhancement is a perceived improvement of a person\'s overall ability to logically process i'),
 (2, 'Anxiety', 'Cognitive', 'Anxiety is the experience of negative feelings of apprehension, worry, and general unease.[6] These '),
 (3, 'Creativity enhancement', 'Cognitive', 'Creativity enhancement is a perceived increase in one\'s capability to imagine new ideas, create art,'),
@@ -108,9 +126,9 @@ INSERT INTO `substances` (`SubstanceID`, `ClassID`, `SubstanceName`, `SubstanceD
 --
 
 --
--- Indexes for table `Effects`
+-- Indexes for table `effects`
 --
-ALTER TABLE `Effects`
+ALTER TABLE `effects`
   ADD PRIMARY KEY (`EffectID`);
 
 --
@@ -124,9 +142,9 @@ ALTER TABLE `substances`
 --
 
 --
--- AUTO_INCREMENT for table `Effects`
+-- AUTO_INCREMENT for table `effects`
 --
-ALTER TABLE `Effects`
+ALTER TABLE `effects`
   MODIFY `EffectID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --

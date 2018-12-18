@@ -11,7 +11,7 @@
     <title>SubstanceWiki</title>
 </head>
 <body>
-
+<?php include("connection.php")?>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -44,12 +44,35 @@
         </div>
     </div>
 </nav>
+<?php
+$substance = "\"".$_GET['substance']."\"";
+$sql = "SELECT * FROM substances WHERE SubstanceName=" . $substance;
+$result = $conn->query($sql);
 
-<div id="content">
-    <div class="alert alert-danger" role="alert">
-        Endorsement warning
+if ($result->num_rows > 0) {
+    // If username and password in db then echo page data else echo user not found message
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>
+<div class="jumbotron"">
+    <h2>Login</h2>
+
+    <div >
+        <form action="admin.php" method="post">
+            <div class="form-group">
+                <label>Email address</label>
+                <input type="email" class="form-control" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-outline-success btn-primary my-2 my-sm-0">Submit</button>
+        </form>
     </div>
-
 </div>
 </body>
 </html>

@@ -45,11 +45,23 @@
     </div>
 </nav>
 
-<div id="content">
-    <div class="alert alert-danger" role="alert">
-        Endorsement warning
-    </div>
+<div class="jumbotron col-lg-6" style="margin:0 auto;">
+    <h2>Login</h2>
 
+    <div >
+    <form action="admin.php" method="post">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="username" class="form-control" placeholder="Enter email" required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Password" required>
+        </div>
+
+        <button type="submit" class="btn btn-outline-success btn-primary my-2 my-sm-0">Submit</button>
+    </form>
+    </div>
 </div>
 </body>
 </html>

@@ -19,6 +19,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="scripts/livesearch.js"></script>
 <?php include('livesearch.php'); ?>
+<?php include('connection.php');?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">SubstanceWiki</a>
@@ -35,7 +36,7 @@
                 <a class="nav-link" href="substance.php">Substance</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link" href="login.php">Login</a>
             </li>
         </ul>
         <div class="wrapper">
@@ -49,17 +50,6 @@
 </nav>
 
 <?php
-$servername = "localhost";
-$username = "pi";
-$password = "raspberry";
-$dbname = "mydb";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 $substance = "\"".$_GET['substance']."\"";
 $sql = "SELECT * FROM substances WHERE SubstanceName=" . $substance;
 $result = $conn->query($sql);
