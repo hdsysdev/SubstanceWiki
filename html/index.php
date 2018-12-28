@@ -29,10 +29,10 @@
                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="substance.php">Substance</a>
+                <a class="nav-link" href="substance.php?substance=DMT">Substance</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.php">Login</a>
+                <a class="nav-link" href="admin.php">Login</a>
             </li>
         </ul>
         <div class="wrapper">
@@ -49,7 +49,7 @@
     <div class="alert alert-danger" role="alert">
         Endorsement warning
     </div>
-
+<p><?php phpinfo()?></p>
 </div>
 </body>
 </html>

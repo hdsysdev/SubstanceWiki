@@ -1,14 +1,8 @@
 <?php
-$mysqli = mysqli_connect('localhost','root','','SubstanceWiki');
-
-/* check connection */
-if ($mysqli->connect_errno) {
-    printf("Connect failed: %s\n", $mysqli->connect_error);
-    exit();
-}
+include("connection.php");
 
 $query = "SELECT * FROM substances";
-$result = $mysqli->query($query);
+$result = $conn->query($query);
 
 while($row = $result->fetch_array())
 {
@@ -19,7 +13,7 @@ while($row = $result->fetch_array())
 $result->free();
 
 /* close connection */
-$mysqli->close();
+$conn->close();
 
 // get the q parameter from URL
 $q = @$_REQUEST["q"];
@@ -51,4 +45,3 @@ if (isset($q))
     }
 }
 ?>
-

@@ -32,7 +32,7 @@
                 <a class="nav-link" href="substance.php">Substance</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.php">Login</a>
+                <a class="nav-link" href="admin.php">Login</a>
             </li>
         </ul>
         <div class="wrapper">
@@ -45,34 +45,188 @@
     </div>
 </nav>
 <?php
-$substance = "\"".$_GET['substance']."\"";
-$sql = "SELECT * FROM substances WHERE SubstanceName=" . $substance;
-$result = $conn->query($sql);
+if (!empty($_POST['username'])) {
+    $username = "\"" . $_POST['username'] . "\"";
+    $password = "\"" . $_POST['password'] . "\"";
+    $sql = "SELECT * FROM admin WHERE username=" . $username;
+    $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    // If username and password in db then echo page data else echo user not found message
-} else {
-    echo "0 results";
-}
-$conn->close();
-?>
-<div class="jumbotron"">
-    <h2>Login</h2>
-
-    <div >
-        <form action="admin.php" method="post">
-            <div class="form-group">
-                <label>Email address</label>
-                <input type="email" class="form-control" placeholder="Enter email" required>
+    //Checks if username is found in the database
+    if ($result->num_rows == 1) {
+        while($row = $result->fetch_assoc()) {
+            $database_password = $row["password"];
+        }
+        //Compares user password to hashed password in database
+        if (password_verify($password, $database_password)){
+            $sql = "SELECT * FROM substances";
+            $result = $conn->query($sql);
+            ?>
+            <div class="col-lg-6">
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Substance Name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Description" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Pharmacology</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Pharmacology" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Chemistry" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Low Dose Range</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Low Dose Range">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Mid Dose Range</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputPassword3" placeholder="Mid Dose Range">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">High Dose Range</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="High Dose Range">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Structure Image Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputPassword3" placeholder="Structure Image Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label >Structure Image</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Physical Effects</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Physical Effects">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Cognitive Effects</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputPassword3" placeholder="Cognitive Effects">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" placeholder="Password" required>
-            </div>
+            <hr>
+            <h3>Substances</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Pharmacology</th>
+                    <th scope="col">Chemistry</th>
+                    <th scope="col">Low Doses</th>
+                    <th scope="col">Medium Doses</th>
+                    <th scope="col">High Doses</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Physical Effects</th>
+                    <th scope="col">Cognitive Effects</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                while($row = mysqli_fetch_array($result)) {
+                    echo "<tr>
+                            <td>" . $row[2] . "</td>
+                            <td>" . $row[3] . "</td>
+                            <td>" . $row[4] . "</td>
+                            <td>" . $row[5] . "</td>
+                            <td>" . $row[6] . "</td>
+                            <td>" . $row[7] . "</td>
+                            <td>" . $row[8] . "</td>
+                            <td>" . $row[9] . "</td>
+                            <td>" . $row[10] . "</td>
+                            <td>" . $row[11] . "</td>
+                            <td> <form action='admin.php' method='GET'> 
+                            <button type='submit' name='substance' value='" . $row[2] ."' class=\"btn btn-primary\">Edit</button>
+                            <button type=\"submit\" class=\"btn btn-primary\">Delete</button></form></td>
+                          </tr>";
+                }
+                ?>
+                </tbody>
+            </table>
 
-            <button type="submit" class="btn btn-outline-success btn-primary my-2 my-sm-0">Submit</button>
-        </form>
+    <?php }} else { ?>
+        <div class="jumbotron col-lg-6" style="margin:0 auto;">
+            <h2>Login</h2>
+
+            <div>
+                <form action="admin.php" method="post">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input name="username" type="text" class="form-control"
+                               placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input name="password" type="text" class="form-control"
+                               placeholder="Password" required>
+                    </div>
+                    <div class="alert alert-danger" role="alert">
+                        Username or password is incorrect!
+                    </div>
+                    <button type="submit" class="btn btn-outline-success btn-primary my-2 my-sm-0">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    <?php }
+    $conn->close();
+} else { ?>
+    <div class="jumbotron col-lg-6" style="margin:0 auto;">
+        <h2>Login</h2>
+
+        <div>
+            <form action="admin.php" method="post">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input name="username" type="text" class="form-control"
+                           placeholder="Enter email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input name="password" type="text" class="form-control"
+                           placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="btn btn-outline-success btn-primary my-2 my-sm-0">
+                    Submit
+                </button>
+            </form>
+        </div>
     </div>
-</div>
+<?php }
+?>
+
 </body>
 </html>
