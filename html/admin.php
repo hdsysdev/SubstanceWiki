@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (@$_POST["logout"]=="Log Out")
+{
+    unset($_SESSION["username"]);
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,16 +15,21 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="styles/styles.css"/>
     <title>SubstanceWiki</title>
 </head>
 <body>
-<?php include("connection.php")?>
+
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="scripts/livesearch.js"></script>
+<script src="scripts/logout.js"></script>
+<?php include('livesearch.php'); ?>
+<?php include('connection.php');?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">SubstanceWiki</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,10 +57,17 @@
         </div>
     </div>
 </nav>
+
+
 <?php
-if (!empty($_POST['username'])) {
-    $username = "\"" . $_POST['username'] . "\"";
-    $password = "\"" . $_POST['password'] . "\"";
+//TODO: INSTALL DEBUGGER TO KEEP USER LOGGED IN AND CHECK VARIABLES
+if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
+    if (!empty($_SESSION["username"])){
+        $username = $_SESSION["username"];
+    } else {
+        $username = "\"" . $_POST['username'] . "\"";
+        $password = "\"" . $_POST['password'] . "\"";
+    }
     $sql = "SELECT * FROM admin WHERE username=" . $username;
     $result = $conn->query($sql);
 
@@ -57,7 +77,8 @@ if (!empty($_POST['username'])) {
             $database_password = $row["password"];
         }
         //Compares user password to hashed password in database
-        if (password_verify($password, $database_password)){
+        if (@$_SESSION["username"] == $username || password_verify($password, $database_password)){
+            $_SESSION["username"] = $username;
             $sql = "SELECT * FROM substances";
             $result = $conn->query($sql);
             ?>
@@ -130,8 +151,13 @@ if (!empty($_POST['username'])) {
                     <div class="form-group row">
                         <div class="col-sm-10">
                             <button type="submit" class="btn btn-primary">Submit</button>
+
+
                         </div>
                     </div>
+                </form>
+                <form action="admin.php" method="post" style="display: inline;">
+                    <input type="submit" class="btn btn-primary" name="logout" value="Log Out">
                 </form>
             </div>
             <hr>
