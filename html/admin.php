@@ -79,6 +79,14 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
         if (@$_SESSION["username"] == $username || password_verify($password, $database_password)){
             $_SESSION["username"] = $username;
 
+            if (isset($_GET["delete"])){
+                $sql = "DELETE FROM substances WHERE SubstanceName='" . $_GET["delete"] . "'";
+                if ($conn->query($sql) === true){
+                    echo '<script type="text/javascript">',
+                    'alert("Substance deleted!");',
+                    '</script>';
+                }
+            }
 
             if (isset($_GET["substance"])){
                 $sql = "SELECT * FROM substances WHERE SubstanceName = " . "\"" .$_GET["substance"] . "\"";
@@ -297,7 +305,8 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                             <td>" . $row[11] . "</td>
                             <td> <form action='admin.php' method='GET'> 
                             <button type='submit' name='substance' value='" . $row[2] ."' class=\"btn btn-primary\">Edit</button>
-                            <button type='submit' name='delete' value='" . $row[2] ."' class=\"btn btn-primary\">Delete</button></form></td>
+                            <button type='submit' name='delete' value='" . $row[2] ."' class=\"btn btn-primary\">Delete</button></form>
+                            </td>
                           </tr>";
                 }
                 ?>
