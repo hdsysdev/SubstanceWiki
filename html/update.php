@@ -9,8 +9,7 @@ $lowdose = @$_POST["lowdose"];
 $mediumdose = @$_POST["middose"];
 $highdose = @$_POST["highdose"];
 $image = @$_POST["image"];
-$physicaleffects = @$_POST["physicaleffects"];
-$cognitiveeffects = @$_POST["cognitiveeffects"];
+$effects = @$_POST["effects"];
 
 $sql = "SELECT SubstanceName FROM substances";
 $result = $conn->query($sql);
@@ -41,11 +40,6 @@ function uploadFile(){
             $uploadOk = 0;
         }
     }
-// Check if file already exists
-    if (file_exists($target_file)) {
-        jsMessage("File already exists.");
-        $uploadOk = 0;
-    }
 // Check file size
     if ($_FILES["fileToUpload"]["size"] > 500000) {
         jsMessage("Sorry, your file is too large.");
@@ -53,8 +47,12 @@ function uploadFile(){
     }
 // Allow certain file formats
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif" ) {
+        && $imageFileType != "gif" && basename($_FILES["fileToUpload"]["name"]) != "") {
         jsMessage("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+        $uploadOk = 0;
+    }
+    if (basename($_FILES["fileToUpload"]["name"]) == ""){
+        jsMessage("No image selected");
         $uploadOk = 0;
     }
 // Check if $uploadOk is set to 0 by an error
@@ -67,11 +65,11 @@ function uploadFile(){
     }
 }
 
-if (isset($name) && !$exists) {
+if (isset($name) && $name != "" && !$exists) {
     $sql = $conn->prepare("INSERT INTO substances (SubstanceName, SubstanceDescription, SubstancePharm,
 SubstanceChemistry, LowDoseRange, MediumDoseRange, HighDoseRange, StructureImageName,
-PhysicalEffects, CognitiveEffects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $sql->bind_param("ssssssssss", $name,
+Effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $sql->bind_param("sssssssss", $name,
         $description,
         $pharmacology,
         $chemistry,
@@ -79,18 +77,17 @@ PhysicalEffects, CognitiveEffects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $mediumdose,
         $highdose,
         $image,
-        $physicaleffects,
-        $cognitiveeffects);
+        $effects);
     $sql->execute();
     uploadFile();
     include("admin.php");
     jsMessage("New substance added");
     uploadFile();
-} elseif (isset($name) && $exists) {
+} elseif (isset($name) && $name != "" && $exists) {
     $sql = $conn->prepare("UPDATE substances SET SubstanceName=?, SubstanceDescription=?,
 SubstancePharm=?, SubstanceChemistry=?, LowDoseRange=?, MediumDoseRange=?, HighDoseRange=?,
-StructureImageName=?, PhysicalEffects=?, CognitiveEffects=? WHERE SubstanceName='" . $name . "'");
-    $sql->bind_param("ssssssssss", $name,
+StructureImageName=?, Effects=? WHERE SubstanceName='" . $name . "'");
+    $sql->bind_param("sssssssss", $name,
         $description,
         $pharmacology,
         $chemistry,
@@ -98,18 +95,13 @@ StructureImageName=?, PhysicalEffects=?, CognitiveEffects=? WHERE SubstanceName=
         $mediumdose,
         $highdose,
         $image,
-        $physicaleffects,
-        $cognitiveeffects);
+        $effects);
     $sql->execute();
     include("admin.php");
     jsMessage("Substance modified");
     uploadFile();
-} elseif (!isset($name)) {
+} else  {
     include("admin.php");
     jsMessage("Please enter a substance name.");
 }
-
-
-
-
 ?>

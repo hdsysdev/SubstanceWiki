@@ -99,19 +99,18 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                     $mediumdose = $row["MediumDoseRange"];
                     $highdose = $row["HighDoseRange"];
                     $image = $row["StructureImageName"];
-                    $physicaleffects = $row["PhysicalEffects"];
-                    $cognitiveeffects = $row["CognitiveEffects"];
+                    $effects = $row["Effects"];
                 }} else {
                 unset($name);
-                unset($description);
-                unset($pharmacology);
-                unset($chemistry);
-                unset($lowdose);
-                unset($mediumdose);
-                unset($highdose);
-                unset($image);
-                unset($physicaleffects);
-                unset($cognitiveeffects);
+                $description = "";
+                $pharmacology = "";
+                $chemistry = "";
+                $lowdose = "";
+                $mediumdose = "";
+                $highdose = "";
+                $image = "";
+                $effects = "";
+
             }
                 ?>
             <div class="container-fluid">
@@ -171,15 +170,9 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                             <input type="file" name="fileToUpload" class="form-control-file" >
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Physical Effects</label>
+                            <label class="col-sm-2 col-form-label">Effects</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="physicaleffects" value="<?php echo @$physicaleffects; ?>" placeholder="Physical Effects">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Cognitive Effects</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="cognitiveeffects" value="<?php echo @$physicaleffects; ?>" placeholder="Cognitive Effects">
+                                <input type="text" class="form-control" name="effects" value="<?php echo $effects; ?>" placeholder="Effects">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -193,7 +186,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                         <input type="submit" class="btn btn-primary" name="logout" value="Log Out">
                     </form>
                 </div>
-            <div class="table-responsive col-lg-6 col-sm-12 col-xs-12" style="overflow-y: scroll; height:900px;">
+            <div class="col-lg-6 col-sm-12 col-xs-12" style="overflow-y: scroll; height:900px;">
             <table class="table" id="effect-table">
                 <thead>
                 <tr>
@@ -227,15 +220,14 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col" class="d-none d-xl-table-cell">Pharmacology</th>
+                    <th scope="col" class="d-none d-sm-table-cell">Description</th>
+                    <th scope="col" class="d-none d-lg-table-cell">Pharmacology</th>
                     <th scope="col" class="d-none d-xl-table-cell">Chemistry</th>
                     <th scope="col" class="d-none d-xl-table-cell">Low Doses</th>
                     <th scope="col" class="d-none d-xl-table-cell">Medium Doses</th>
                     <th scope="col" class="d-none d-xl-table-cell">High Doses</th>
-                    <th scope="col" class="d-none d-lg-table-cell">Image</th>
-                    <th scope="col" >Physical Effects</th>
-                    <th scope="col" >Cognitive Effects</th>
+                    <th scope="col" class="d-none d-xl-table-cell">Image</th>
+                    <th scope="col" class="d-none d-sm-table-cell">Effects</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -246,15 +238,14 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 while($row = mysqli_fetch_array($result)) {
                     echo "<tr>
                             <td>" . $row[2] . "</td>
-                            <td>" . $row[3] . "</td>
-                            <td class=\"d-none d-xl-table-cell\">" . $row[4] . "</td>
+                            <td class=\"d-none d-sm-table-cell\">" . $row[3] . "</td>
+                            <td class=\"d-none d-lg-table-cell\">" . $row[4] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[5] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[6] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[7] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[8] . "</td>
-                            <td class=\"d-none d-lg-table-cell\">" . $row[9] . "</td>
-                            <td >" . $row[10] . "</td>
-                            <td >" . $row[11] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[9] . "</td>
+                            <td class=\"d-none d-sm-table-cell\">" . $row[10] . "</td>
                             <td> <form action='admin.php' method='GET'> 
                             <button type='submit' name='substance' value='" . $row[2] ."' class=\"btn btn-primary\">Edit</button>
                             <button type='submit' name='delete' value='" . $row[2] ."' class=\"btn btn-primary\">Delete</button></form>
@@ -265,7 +256,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 </tbody>
             </table>
 
-    <?php } ?> 
+    <?php } else { ?>
         <div class="jumbotron col-lg-6" style="margin:0 auto;">
             <h2>Login</h2>
 
@@ -289,7 +280,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                     </button>
                 </form>
             </div>
-        </div> <?php } else { ?>
+        </div> <?php }} else { ?>
         <div class="jumbotron col-lg-6" style="margin:0 auto;">
             <h2>Login</h2>
 

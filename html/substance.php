@@ -69,7 +69,6 @@ if ($result->num_rows > 0) {
 } else {
     echo "0 results";
 }
-$conn->close();
 ?>
 
 <div id="content">
@@ -91,20 +90,58 @@ $conn->close();
                 <hr class="my-4"/>
                 <p><?php echo $pharm ?></p>
                 <h2>Subjective Effects</h2>
-                <hr class="my-4"/>
+                <hr/>
+                <p>Remember, this is is not an exhaustive list, not all of these effects will manifest themselves every
+                    time the substance is administered. Some of these effects may not be present at all. Re-dosing in an attempt to bring out effects not currently being experienced
+                    is strongly advised against. This will almost always increase the side effects experienced without increasing
+                    desirable effects.</p>
                 <div class="card">
                     <h5 class="card-header">Physical Effects</h5>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <dl>
+                        <?php
+//                        $substance = "\"".$_GET['substance']."\"";
+                        $sql = "SELECT Effects FROM substances WHERE SubstanceName=" . $substance;
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                $effectIDs = $row["Effects"];
+                            }
+                        }
+                        $effects = str_replace(",", "','", $effectIDs);
+                        $sql = "SELECT * FROM effects WHERE EffectID IN('" . $effects ."');";
+                        $result = $conn->query($sql);
+
+
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                if ($row["EffectType"] == "Physical"){
+                                    echo "<dt>" . $row["EffectName"] ."</dt>
+                                        <dd>" . $row["EffectDescription"] . "</dd>";
+                                }
+                            }
+                        }
+                        ?>
+                        </dl>
                     </div>
                 </div>
                 <br>
                 <div class="card">
                     <h5 class="card-header">Cognitive Effects</h5>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <dl>
+                        <?php
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                if ($row["EffectType"] == "Cognitive"){
+                                    echo "<dt>" . $row["EffectName"] ."</dt>
+                                        <dd>" . $row["EffectDescription"] . "</dd>";
+                                }
+                            }
+                        }?>
+                        </dl>
                     </div>
                 </div>
             </div>
@@ -135,10 +172,12 @@ $conn->close();
                         </tbody>
                     </table>
                 </div>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
             </div>
         </div>
     </div>
+    <?php
+    $conn->close();
+    ?>
 </div>
 </body>
 </html>
