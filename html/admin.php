@@ -18,7 +18,6 @@ if (@$_POST["logout"]=="Log Out")
     <link rel="stylesheet" type="text/css" href="styles/styles.css"/>
     <title>SubstanceWiki</title>
 </head>
-<body>
 
 
 <!-- Optional JavaScript -->
@@ -71,7 +70,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
     $result = $conn->query($sql);
 
     //Checks if username is found in the database
-    if ($result->num_rows == 1) {
+    if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $database_password = $row["password"];
         }
@@ -115,8 +114,10 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 unset($cognitiveeffects);
             }
                 ?>
+            <div class="container-fluid">
+                <div class="row">
                 <div class="col-lg-6">
-                    <form action="update.php" method="POST">
+                    <form action="update.php" method="POST" enctype="multipart/form-data">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
@@ -167,7 +168,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                         </div>
                         <div class="form-group">
                             <label >Structure Image</label>
-                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                            <input type="file" name="fileToUpload" class="form-control-file" >
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Physical Effects</label>
@@ -187,88 +188,39 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                             </div>
                         </div>
                     </form>
-
-<!--            --><?php //} else { ?>
-<!--                <div class="col-lg-6">-->
-<!--                    <form action="">-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Name</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputEmail3" placeholder="Substance Name">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Description</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Description" rows="3"></textarea>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Pharmacology</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Pharmacology" rows="3"></textarea>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Password</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Chemistry" rows="3"></textarea>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Low Dose Range</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputEmail3" placeholder="Low Dose Range">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Mid Dose Range</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputPassword3" placeholder="Mid Dose Range">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">High Dose Range</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputEmail3" placeholder="High Dose Range">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Structure Image Name</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputPassword3" placeholder="Structure Image Name">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <label >Structure Image</label>-->
-<!--                            <input type="file" class="form-control-file" id="exampleFormControlFile1">-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Physical Effects</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputEmail3" placeholder="Physical Effects">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <label class="col-sm-2 col-form-label">Cognitive Effects</label>-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <input type="text" class="form-control" id="inputPassword3" placeholder="Cognitive Effects">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="form-group row">-->
-<!--                            <div class="col-sm-10">-->
-<!--                                <button type="submit" class="btn btn-primary">Submit</button>-->
-<!---->
-<!---->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!---->
-<!--                --><?php //}?>
+                    
                     <form action="admin.php" method="post" style="display: inline;">
                         <input type="submit" class="btn btn-primary" name="logout" value="Log Out">
                     </form>
                 </div>
+            <div class="table-responsive col-lg-6 col-sm-12 col-xs-12" style="overflow-y: scroll; height:900px;">
+            <table class="table" id="effect-table">
+                <thead>
+                <tr>
+                    <th scope="col">EffectID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $sql = "SELECT * FROM effects";
+                $result = $conn->query($sql);
+                while($row = mysqli_fetch_array($result)) {
+                    echo "<tr>
+                            <td>" . $row[0] . "</td>
+                            <td>" . $row[1] . "</td>
+                            <td>" . $row[2] . "</td>
+                            <td>" . $row[3] . "</td>
+                          </tr>";
+                }
+                ?>
+                </tbody>
+            </table>
+            </div>
+            </div>
+            </div>
             <hr>
             <h3>Substances</h3>
             <table class="table">
@@ -276,14 +228,14 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Pharmacology</th>
-                    <th scope="col">Chemistry</th>
-                    <th scope="col">Low Doses</th>
-                    <th scope="col">Medium Doses</th>
-                    <th scope="col">High Doses</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Physical Effects</th>
-                    <th scope="col">Cognitive Effects</th>
+                    <th scope="col" class="d-none d-xl-table-cell">Pharmacology</th>
+                    <th scope="col" class="d-none d-xl-table-cell">Chemistry</th>
+                    <th scope="col" class="d-none d-xl-table-cell">Low Doses</th>
+                    <th scope="col" class="d-none d-xl-table-cell">Medium Doses</th>
+                    <th scope="col" class="d-none d-xl-table-cell">High Doses</th>
+                    <th scope="col" class="d-none d-lg-table-cell">Image</th>
+                    <th scope="col" >Physical Effects</th>
+                    <th scope="col" >Cognitive Effects</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -295,14 +247,14 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                     echo "<tr>
                             <td>" . $row[2] . "</td>
                             <td>" . $row[3] . "</td>
-                            <td>" . $row[4] . "</td>
-                            <td>" . $row[5] . "</td>
-                            <td>" . $row[6] . "</td>
-                            <td>" . $row[7] . "</td>
-                            <td>" . $row[8] . "</td>
-                            <td>" . $row[9] . "</td>
-                            <td>" . $row[10] . "</td>
-                            <td>" . $row[11] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[4] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[5] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[6] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[7] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[8] . "</td>
+                            <td class=\"d-none d-lg-table-cell\">" . $row[9] . "</td>
+                            <td >" . $row[10] . "</td>
+                            <td >" . $row[11] . "</td>
                             <td> <form action='admin.php' method='GET'> 
                             <button type='submit' name='substance' value='" . $row[2] ."' class=\"btn btn-primary\">Edit</button>
                             <button type='submit' name='delete' value='" . $row[2] ."' class=\"btn btn-primary\">Delete</button></form>
@@ -313,7 +265,31 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 </tbody>
             </table>
 
-    <?php }} else { ?>
+    <?php } ?> 
+        <div class="jumbotron col-lg-6" style="margin:0 auto;">
+            <h2>Login</h2>
+
+            <div>
+                <form action="admin.php" method="post">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input name="username" type="text" class="form-control"
+                               placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input name="password" type="password" class="form-control"
+                               placeholder="Password" required>
+                    </div>
+                    <div class="alert alert-danger" role="alert">
+                        Username or password is incorrect!
+                    </div>
+                    <button type="submit" class="btn btn-outline-success btn-primary my-2 my-sm-0">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div> <?php } else { ?>
         <div class="jumbotron col-lg-6" style="margin:0 auto;">
             <h2>Login</h2>
 
@@ -340,7 +316,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
         </div>
     <?php }
     $conn->close();
-} else { ?>
+    } else { ?>
     <div class="jumbotron col-lg-6" style="margin:0 auto;">
         <h2>Login</h2>
 
