@@ -74,8 +74,7 @@ if ($result->num_rows > 0) {
 <div id="content">
     <div class="alert alert-danger endorsementAlert" role="alert">
         <img src="img/warning.png" style="object-fit: cover; height: 35px;">
-        <span>The information contained on this page is for education purposes only. We do not condone or endorse the use of psychoactive substances.
-            However we do believe in freedom of information and harm reduction.</span>
+        <span>The information contained on this page is strictly for education and harm reduction purposes only. We do not condone or endorse the use of psychoactive substances.</span>
     </div>
     <div class="container-fluid">
         <div class="row">

@@ -113,6 +113,10 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
 
             }
                 ?>
+            <div class="alert alert-info" role="alert">
+                Substance will be added if it is not present in the database. If the name is present in the database, the entry will be overwritten with the
+                new data from the form. The effects field must be filled with the appropriate Effect IDs, separated by commas with no spaces.
+            </div>
             <div class="container-fluid">
                 <div class="row">
                 <div class="col-lg-6">
@@ -221,11 +225,9 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col" class="d-none d-sm-table-cell">Description</th>
-                    <th scope="col" class="d-none d-lg-table-cell">Pharmacology</th>
+                    <th scope="col" class="d-none d-xl-table-cell">Pharmacology</th>
                     <th scope="col" class="d-none d-xl-table-cell">Chemistry</th>
-                    <th scope="col" class="d-none d-xl-table-cell">Low Doses</th>
-                    <th scope="col" class="d-none d-xl-table-cell">Medium Doses</th>
-                    <th scope="col" class="d-none d-xl-table-cell">High Doses</th>
+                    <th scope="col" class="d-none d-sm-table-cell">Doses</th>
                     <th scope="col" class="d-none d-xl-table-cell">Image</th>
                     <th scope="col" class="d-none d-sm-table-cell">Effects</th>
                     <th scope="col">Actions</th>
@@ -236,16 +238,15 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 $sql = "SELECT * FROM substances";
                 $result = $conn->query($sql);
                 while($row = mysqli_fetch_array($result)) {
+                    $effects = mb_strimwidth($row[10], 0, 15, "...");
                     echo "<tr>
                             <td>" . $row[2] . "</td>
                             <td class=\"d-none d-sm-table-cell\">" . $row[3] . "</td>
-                            <td class=\"d-none d-lg-table-cell\">" . $row[4] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[4] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[5] . "</td>
-                            <td class=\"d-none d-xl-table-cell\">" . $row[6] . "</td>
-                            <td class=\"d-none d-xl-table-cell\">" . $row[7] . "</td>
-                            <td class=\"d-none d-xl-table-cell\">" . $row[8] . "</td>
+                            <td class=\"d-none d-sm-table-cell\">" . $row[6] . "<br>". $row[7] . "<br>". $row[8] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[9] . "</td>
-                            <td class=\"d-none d-sm-table-cell\">" . $row[10] . "</td>
+                            <td class=\"d-none d-sm-table-cell\">" . $effects . "</td>
                             <td> <form action='admin.php' method='GET'> 
                             <button type='submit' name='substance' value='" . $row[2] ."' class=\"btn btn-primary\">Edit</button>
                             <button type='submit' name='delete' value='" . $row[2] ."' class=\"btn btn-primary\">Delete</button></form>

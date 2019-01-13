@@ -68,7 +68,7 @@ function uploadFile(){
 if (isset($name) && $name != "" && !$exists) {
     $sql = $conn->prepare("INSERT INTO substances (SubstanceName, SubstanceDescription, SubstancePharm,
 SubstanceChemistry, LowDoseRange, MediumDoseRange, HighDoseRange, StructureImageName,
-Effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+Effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $sql->bind_param("sssssssss", $name,
         $description,
         $pharmacology,
@@ -79,7 +79,6 @@ Effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $image,
         $effects);
     $sql->execute();
-    uploadFile();
     include("admin.php");
     jsMessage("New substance added");
     uploadFile();
