@@ -13,15 +13,15 @@ $result->free();
 
 $conn->close();
 
-$q = @$_REQUEST["q"];
+$request = @$_REQUEST["q"];
 
 $hint = "";
 
-if ($q !== "") {
-    $q = strtolower($q);
-    $len=strlen($q);
+if ($request !== "") {
+    $request = strtolower($request);
+    $len=strlen($request);
     foreach($a as $name) {
-        if (@stristr($q, @substr($name, 0, $len))) {
+        if (@stristr($request, @substr($name, 0, $len))) {
             if ($hint === "") {
                 $hint = "<a href=\"substance.php?substance=" . $name . "\" class=\"list-group-item list-group-item-action\">" . $name . "</a>";
             } else {
@@ -31,7 +31,7 @@ if ($q !== "") {
     }
 }
 
-if (isset($q))
+if (isset($request))
 {
     if ($hint != "") {
         echo $hint;

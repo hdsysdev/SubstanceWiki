@@ -41,16 +41,12 @@ if (@$_POST["logout"]=="Log Out")
                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="substance.php">Substance</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="admin.php">Login</a>
             </li>
         </ul>
         <div class="wrapper">
             <div class="div1"><form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" onkeyup="showResult(this.value)" type="search" placeholder="Search">
-                    <!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+                    <input class="form-control mr-sm-2" onkeyup="showResult(this.value)" type="search" placeholder="Live Search">
                 </form></div>
             <div class="list-group div2" id="livesearch"> </div>
         </div>
@@ -142,7 +138,7 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Chemistry</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" name="chemistry" placeholder="Chemistry" rows="4"><?php echo @$pharmacology; ?></textarea>
+                                <textarea class="form-control" name="chemistry" placeholder="Chemistry" rows="4"><?php echo @$chemistry; ?></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -238,18 +234,18 @@ if (!empty($_POST['username']) || !empty($_SESSION["username"])) {
                 $sql = "SELECT * FROM substances";
                 $result = $conn->query($sql);
                 while($row = mysqli_fetch_array($result)) {
-                    $effects = mb_strimwidth($row[10], 0, 15, "...");
+                    $effects = mb_strimwidth($row[9], 0, 15, "...");
                     echo "<tr>
-                            <td>" . $row[2] . "</td>
-                            <td class=\"d-none d-sm-table-cell\">" . $row[3] . "</td>
+                            <td>" . $row[1] . "</td>
+                            <td class=\"d-none d-sm-table-cell\">" . $row[2] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[3] . "</td>
                             <td class=\"d-none d-xl-table-cell\">" . $row[4] . "</td>
-                            <td class=\"d-none d-xl-table-cell\">" . $row[5] . "</td>
-                            <td class=\"d-none d-sm-table-cell\">" . $row[6] . "<br>". $row[7] . "<br>". $row[8] . "</td>
-                            <td class=\"d-none d-xl-table-cell\">" . $row[9] . "</td>
+                            <td class=\"d-none d-sm-table-cell\">" . $row[5] . "<br>". $row[6] . "<br>". $row[7] . "</td>
+                            <td class=\"d-none d-xl-table-cell\">" . $row[8] . "</td>
                             <td class=\"d-none d-sm-table-cell\">" . $effects . "</td>
                             <td> <form action='admin.php' method='GET'> 
-                            <button type='submit' name='substance' value='" . $row[2] ."' class=\"btn btn-primary\">Edit</button>
-                            <button type='submit' name='delete' value='" . $row[2] ."' class=\"btn btn-primary\">Delete</button></form>
+                            <button type='submit' name='substance' value='" . $row[1] ."' class=\"btn btn-primary\">Edit</button>
+                            <button type='submit' name='delete' value='" . $row[1] ."' class=\"btn btn-primary\">Delete</button></form>
                             </td>
                           </tr>";
                 }

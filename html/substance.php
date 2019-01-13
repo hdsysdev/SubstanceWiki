@@ -33,16 +33,12 @@
                 <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="substance.php?substance=DMT">Substance</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="admin.php">Login</a>
             </li>
         </ul>
         <div class="wrapper">
             <div class="div1"><form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" onkeyup="showResult(this.value)" type="search" placeholder="Search">
-<!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+                <input class="form-control mr-sm-2" onkeyup="showResult(this.value)" type="search" placeholder="Live Search">
             </form></div>
             <div class="list-group div2" id="livesearch"> </div>
         </div>
